@@ -154,20 +154,23 @@ not a broken build, and it reads like one. Put the libraries beside the executab
 path.
 
 Measured on Linux x64, all from the same game source: **600 frames on FNA (Vulkan, AMD Radeon
-780M)**, and 600 frames on CNA over each of four renderers.
+780M)**, and 600 frames on CNA over each of four renderers (2026-10, before CNA retired
+`SDL_RENDERER`):
 
 | CNA renderer | 60 frames | 600 frames | what it exercises here |
 | --- | --- | --- | --- |
 | OPENGLES3 | pass | pass | the full path, 3D cube included |
 | SOFTWARE | pass | pass | a 3D pipeline with no volume textures and no compiled effects |
-| SDL_RENDERER | pass | pass | **the 2D fallback**, and the only renderer that takes it |
+| SDL_RENDERER | pass | pass | the 2D fallback (the renderer reported no `ThreeD` capability) |
 | HEADLESS | pass | pass | the loop and the call sequence, rasterising nothing |
 
-`SDL_RENDERER` is the one worth noting. It reports no `ThreeD` capability, so it is the first
-renderer on which the template's "CNA renderers without a 3D pipeline receive a bouncing 2D
-fallback" sentence is a measurement rather than a promise -- the guarded 3D path is skipped and the
-fallback draws for 600 frames. The template needed no change to run there, which is the point of
-asking the renderer for its capabilities instead of naming renderers.
+Re-measured on 2026-11-09 against CNA `next` 30142a14d (C ABI 0.60.0) with cna-dotnet f23f73b:
+OPENGLES3 passes 60 and 600 frames on Mesa GLES 3.2, through CNA's private GPU runner.
+
+CNA retired `SDL_RENDERER` on 2026-10-13. Among the current renderers, `STUB` reports no
+capability at all (`StubRenderer::SupportsCapability` returns false), so it is the one that takes
+the 2D fallback now; that run was not repeated here. The template keeps asking the renderer for
+its capabilities instead of naming renderers.
 
 The renderer line prints what the engine calls itself, so on FNA it reports the display adapter's
 description (`Dell Inc. 27"`) rather than a backend name. The template asks the runtime and prints
