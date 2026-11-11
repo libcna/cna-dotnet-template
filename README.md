@@ -167,6 +167,10 @@ Measured on Linux x64, all from the same game source: **600 frames on FNA (Vulka
 Re-measured on 2026-11-09 against CNA `next` 30142a14d (C ABI 0.60.0) with cna-dotnet f23f73b:
 OPENGLES3 passes 60 and 600 frames on Mesa GLES 3.2, through CNA's private GPU runner.
 
+Re-measured on 2026-11-11 against CNA `next` 4ef67873b (C ABI 0.60.0) with cna-dotnet c8dd51e:
+OPENGLES3 again passes 60 and 600 frames, both from the development-mode consumer and from the
+package-mode consumer that loads the packaged native library, through CNA's private GPU runner.
+
 CNA retired `SDL_RENDERER` on 2026-10-13. Among the current renderers, `STUB` reports no
 capability at all (`StubRenderer::SupportsCapability` returns false), so it is the one that takes
 the 2D fallback now; that run was not repeated here. The template keeps asking the renderer for
